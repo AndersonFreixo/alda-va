@@ -1,0 +1,5 @@
+vosk==0.3.32
+sounddevice==0.4.4
+voxpopuli==0.3.7
+scipy==1.8.0
+colorama==0.4.4

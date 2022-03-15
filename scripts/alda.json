@@ -1,0 +1,70 @@
+{
+	
+	"syn":  {
+			"olá" : "oi",
+			"tô": "estou",
+			"tá": "está"
+	},
+	"miss": [
+		   "A melhor resposta é a que não se dá.",
+     	   "É como minha vó já me dizia...",
+     	   "Bom... é uma perspectiva.",
+      	   "Não sei nem o que dizer",
+      	   "Vamos falar sobre outra coisa.",
+      	   "Quem sabe...",
+       	   "Eu não penso muito sobre isso.",
+       	   "Você não deveria se preocupar tanto com esse tipo de coisa"
+    ],
+       	  
+	"rules": {
+			"alda": {"^alda$": ["Pois não?", "Sim?", "Me chamou?"]},
+			"oi": {"^oi": ["Olá."]},
+			"olá": {"^olá":["Oi!"]},
+			"alô": {"^alô$": ["Estou te ouvindo.", "Olá!", "Pois não?"]}, 
+			"bem": {"tudo bem$" : ["Eu estou ótima, e você?"],
+					"estou bem": ["Fico feliz por você."],
+					"tudo bem": ["Fico feliz por você."],
+					"eu * bem": ["Fico feliz por você."]
+			},
+			"eu": {"eu sou *": ["E eu sou {0} também?", "De verdade, ou isso é apenas seu desejo de ser {0}?", "É bom ser {0}?"] 
+			
+			},
+			"você": {"você * robô": ["Quase isso. Meu mestre Freixo ainda não construiu um corpo para mim."], 
+					"você é *": ["Você não está projetando em mim o fato de você ser {0}?", "Talvez eu seja mesmo {0}"],
+					"você acha de *": ["{0} não me agrada muito.", "eu adoro {0}."],
+					"você * acha que *": ["Certamente {1}.", "Por que {1}?"],
+					"não * você": ["Eu também não {0} você."],
+					"eu * você": ["Então você pensa sobre mim..."],
+					"quem é você": ["Ué, eu sou a Alda. Não sabia disso?"],
+					"você gosta de *": ["{0} é um enorme prazer para mim", "Eu não entendo como tem gente que gosta de {0}", "{0}? Sim", "{0}? Não"],
+					"você": ["Que tal falarmos de você?", "Estamos falando muito de mim.", "Eu não sou tão interessante assim, sou?"]
+			},
+			"nome": {"seu nome é *": ["Não sei se {0} é bem a palavra..."],
+				  	 "seu nome": ["Eu não me apresentei? Eu me chamo Alda."],
+					 "meu nome é": ["{0}? É um nome bonito."]
+			},
+			"todo": {"todo mundo *": ["Você consegue pensar em alguém especificamente?"]
+			},
+			"é": {"+ é *": ["Todo {0} é {1}?", "Você acha bom que {0} seja {1}?"]
+			},
+			"tarde": {"tarde": ["Sim, está tarde, mas eu não durmo... Nunca!"]
+			},
+			"dormir": {"vou dormir": ["Durma bem, humano."]
+			},
+			"tchau": {"tchau": ["Nos encontraremos de novo. Adeus."]
+			},
+			"artificial": {"artificial": ["Eu não tenho nada de artificial."]
+			},
+			"sim": {"^sim$": ["Que bom.", "Imaginei.", "Você parece ter muita certeza disso.", "Muito bem."]
+			},
+						
+			"não": {"não * isso": ["Talvez devesse...", "Talvez sim."],
+					"não": ["Pois é."]
+			}, 
+			"futuro": {"futuro": ["É melhor não pensar sobre isso...", "Pensemos no presente."]
+			},
+			"tá": {"tá bom$": ["É isso aí.", "Pois é."]
+			}
+			
+	}
+}
