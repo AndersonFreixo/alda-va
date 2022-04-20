@@ -2,6 +2,9 @@ from collections import defaultdict
 import re
 import random
 import json
+import importlib
+
+FUNCS_PATH = "reasoners.smarter_funcs."
 
 class Rule:
     def __init__(self, pattern):
@@ -13,6 +16,8 @@ class Reasoner:
         self.rules = defaultdict(lambda: list())
         self.miss = None
         self._load_script(script_filename)
+        self.functions = dict()
+
     def _re_replace(self, rule):
         """Replace symbols of script source for regex special characters"""
         r = rule.replace("*", "(.*)")
@@ -64,11 +69,28 @@ class Reasoner:
 
                     if match:
                         rule, words = match
-                        return random.choice(rule.templates).format(*words)
+                        #Provisory (and maybe definitive) solution:
+                        #If the first template of a rule is a function, then
+                        #it is always fired. All other possibilites are ignored. 
+                        if "$func" in rule.templates[0]:
+                            #A function template has the form:
+                            #$func:func_name:0,1,2 (where 0,1,2 is an example order
+                            #of args.
+                            _, func_name, args_order = rule.templates[0].split(":")
+                            if func_name not in self.functions.keys():
+                                self.functions[func_name] = importlib.import_module(FUNCS_PATH+func_name)
+                            
+                            args_order = [int(x) for x in args_order.split(',')]
+                            args = [words[i] for i in args_order]
+                            return self.functions[func_name].func(* args)
+                        else:
+
+                            return random.choice(rule.templates).format(*words)
+                    
         return random.choice(self.miss)
 
 if __name__ == '__main__':
-    reasoner = Reasoner("alda.json")
+    reasoner = Reasoner("../scripts/smarter_alda.json")
     reasoner.print_all_rules()
     q = input(">>").lower()
     while (q != "sair"):

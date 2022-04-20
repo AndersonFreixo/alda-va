@@ -9,16 +9,15 @@ import argparse
 import configparser
 import vosk
 import json
-
-from reasoners.eliza import Reasoner 
+import importlib
 from speech import recognition, synthesis
 
-DEFAULT_CONFIG = "config/alda.ini"
-
+DEFAULT_CONFIG = "config/smarter_alda.ini"
+REASONERS_PATH = "reasoners."
 class App:
-    def __init__(self, name, script_path, model_path):
+    def __init__(self, name, script_path, model_path, reasoner):
         self.name = name
-        self.reasoner = Reasoner(script_path)
+        self.reasoner = importlib.import_module(REASONERS_PATH + reasoner).Reasoner(script_path)
         self.queue = queue.Queue()
         #Find samplerate 
         device_info = sd.query_devices(sd.default.device[0], 'input')
@@ -67,6 +66,7 @@ if __name__ == "__main__":
     parser.add_argument("--script", "-s", help = "path to script file")
     parser.add_argument("--model", "-m", help = "path to model file")
     parser.add_argument("--name", "-n", help = "change name of the assistant")
+    parser.add_argument("--reasoner", "-r", help = "reasoning engine for the chatbot")
     parser.add_argument("--config", "-c", type = argparse.FileType("r"), help = "config file")
     args = parser.parse_args()
     
@@ -81,6 +81,7 @@ if __name__ == "__main__":
         args.model = config["ARGUMENTS"]["model"]
     if not args.name:
         args.name = config["ARGUMENTS"]["name"]
-
-    app = App(args.name, args.script, args.model)
+    if not args.reasoner:
+        args.reasoner = config["ARGUMENTS"]["reasoner"]
+    app = App(args.name, args.script, args.model, args.reasoner)
     app.run()
