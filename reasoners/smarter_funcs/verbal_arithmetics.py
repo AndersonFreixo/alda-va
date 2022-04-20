@@ -38,6 +38,7 @@ int_to_word = {0: "zero",
             800: "oitocentos",
             900: "novecentos"}
 
+#Create word_to_int as the inverse of the int_to_word dict
 word_to_int  = dict()
 for key, value in int_to_word.items():
     word_to_int[value] = key
@@ -56,101 +57,87 @@ thousands["trilhões"] =   1000000000000
 thousands["quadrilhão"] = 1000000000000000
 thousands["quadrihões"] = 1000000000000000
 
-
-
-
-def int_str_to_hundred(num):
-    num_seq = []
-    if num[0] != '0':
-        if int(num[1:]) == 0:
-            if num[0] == '1':
-                #100 is represented by 'cem', other numbers from 101 to 199
-                #are represented as 'cento e...' + the rest of the number. 
-                return 'cem'
-            else:
-                return int_to_word[int(num[0])*100]
-        else:
-            num_seq.append(int_to_word[int(num[0])*100])
-            num_seq.append("e")
-    if int(num[1:]) < 20:
-    #Each number from 0 to 19 have an individual name
-        num_seq.append(int_to_word[int(num[1:])])
-        return " ".join(num_seq)
+def int_to_verbal_hundred(num):
+    """Gets an integer from 0 to 999 and converts it into its
+    verbal representation in Portuguese."""
+    word_seq = []
+    num = int(num) 
+    if num == 100:
+        return 'cem'
+     
+    elif num % 100 == 0 or num < 20:    
+        return int_to_word[num]
     else:
-        num_seq.append(int_to_word[int(num[1])*10])
-
-    if num[2] != '0':
-        num_seq.append("e")
-        num_seq.append(int_to_word[int(num[2])])
-        
-    return " ".join(num_seq)
+        hundred_digit = (num // 100) 
+        tens = num  % 100
+        units = tens % 10
+        if hundred_digit > 0:
+            word_seq.append(int_to_word[hundred_digit * 100])
+        if tens < 20 or tens % 10 == 0:
+            word_seq.append(int_to_word[tens])
+        else:
+            word_seq.append(int_to_word[(tens//10) * 10])
+            word_seq.append(int_to_word[units])
+    return " e ".join(word_seq)
 
 def integer_to_words(num):
-    #This function should be refactored!!!!
-
-    #Assures it is a string and remove eventual extra spaces. 
-    num = str(int(num))
-    slen = len(num)
+    """Converts an integer to a well formed phrase in 
+    Portuguese representing that number"""
+    snum = str(num)
+    slen = len(snum)
     #Divides the string into 3 digit blocks 
     blocks_num = ceil(slen/3)
-    blocks = [] 
-    for i in range(0, blocks_num):
-        if i == 0:
-            b = num[-(3 + (i*3)):]
-    
-        else:
-            b = num[-(3 + (i*3)):-(3*i)]
-        while len(b) < 3:
-            b = "0"+b
-        blocks.insert(0, b)
-
-
+    blocks = []
+    blocks.append(int(snum[-3:]))
+    for i in range(1, blocks_num):
+            blocks.append(int(snum[-(3 + (i*3)):-(3*i)]))
+    print(blocks)
     sentence = []
-    millions = [("milhão", "milhões"), ("bilhão", "bilhões"), ("trilhão", "trilhões")]
+    millions = [("milhão", "milhões"), ("bilhão", "bilhões"), ("trilhão", "trilhões"), ("quadrilhão", "quadrilhões")]
     
     decs = len(blocks)
     counter = 0
     
     #Hundreds part
-    hundreds = blocks.pop(-1)
-    if int(hundreds) > 0:
-        sentence.append(int_str_to_hundred(hundreds))
+    hundreds = blocks.pop(0)
+    if hundreds > 0:
+        sentence.append(int_to_verbal_hundred(hundreds))
     
     #Thousands part
     if blocks:
-        thousands = blocks.pop(-1)
-        if 0 < int(hundreds) < 100:
-            #For values lesser than 100, we have to add an 'e'
-            #as in "mil e um". 
-            #For values greater than 100, we do not use the 'e'
-            #as in "mil cento e oitenta".
+        thousands = blocks.pop(0)
+        if (hundreds % 100 == 0 or hundreds < 100) and hundreds != 0:
+            #For values which are not multiple of 100, we have to add an 'e'
+            #as in "mil e um". Other values do not use the 'e'
+            #such as as "mil cento e oitenta" or "mil duzentos e noventa".
             sentence.insert(0, "e")
-        if int(thousands) > 0: 
+        if thousands > 0: 
             #In case we have millions but the thousands part is empty
             #the script would write something as "one million zero thousands"
             #so we must check if thousands is 0. 
             sentence.insert(0, "mil")
-        
             if int(thousands) != 1:
                 #We usually ommit the number one when talking about
                 #thousands.
-                sentence.insert(0, int_str_to_hundred(thousands))
+                sentence.insert(0, int_to_verbal_hundred(thousands))
     
     #Millions, billions, etc.
     #We must use the singular form if we are talking about
     #one million or 1 billion and use the plural form 
     #to talk about more than 1 million, billion, and so on.
-    blocks.reverse()
     for b in blocks:
-        if int(b) > 1:
-            sentence.insert(0, millions[counter][1])
-        else:
-            sentence.insert(0, millions[counter][0])
-        sentence.insert(0, int_str_to_hundred(b))
+        if b != 0:
+            if b > 1:
+                sentence.insert(0, millions[counter][1])
+            else:
+                sentence.insert(0, millions[counter][0])
+            sentence.insert(0, int_to_verbal_hundred(b))
         counter += 1
     return " ".join(sentence)
         
 def words_to_integer(sentence):
+    """Receives a well formed phrase in Portuguese containing the verbal
+    representation of a number and converts it to integer"""
     tokens = sentence.split()
     total = 0
     current = 0
@@ -189,6 +176,9 @@ def func(op1, op2, opt):
 
 if __name__ == "__main__":
     while True:
-        ipt = input(">>").lower()
-        print(verbal_arithmetics(ipt))
+        op1 = input("operand 1>").lower()
+        operator = input("operator>").lower()
+        op2 = input("operand 2>").lower()
+        print(func(op1, op2, operator))
+
     
