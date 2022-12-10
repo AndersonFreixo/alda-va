@@ -17,6 +17,12 @@ class Reasoner:
         self.miss = None
         self._load_script(script_filename)
         self.functions = dict()
+    
+    def wake_up(self):
+        wakeup_messages = ["Ops! Cochilei.", 
+            "Hã? Eu estava acordada, eu juro.", 
+            "Quem? Eu? Estou aqui!"]
+        return random.choice(wakeup_messages)
 
     def _re_replace(self, rule):
         """Replace symbols of script source for regex special characters"""

@@ -17,8 +17,23 @@
     ],
        	  
 	"rules": {
+			"sabe": {"você sabe fazer": ["Eu sei fazer muita coisa. Recentemente, meu mestre me ensinou a fazer contas."],
+					"você sabe *": ["Você sabe?", "{0}? Claro que sim.", "Eu deveria saber {0}?", "Vamos testar?"]
+			},
 			"quanto": {"quanto é * (mais|menos|dividido por|vezes) *": ["$func:verbal_arithmetics:0,2,1"]},
 			"alda": {"^alda$": ["Pois não?", "Sim?", "Estou aqui!"]},
+			"conversar":{"não * conversar": ["Podemos ficar em silêncio também.", "Mas foi você que falou comigo primeiro...", "Isso é um adeus?"],
+
+						"conversar sobre *": ["{0} é um assunto muito vasto. Que tal ser mais específico?", "Não tenho muito o que dizer sobre {0}..."],
+						"vamos conversar": ["Sobre o que você quer conversar?", "Vamos falar sobre você", "Tudo bem. Você começa."]
+			},
+			"falar":{"não * falar sobre *": ["Eu também {0}.", "Eu adoraria falar sobre {1}"],
+					"falar sobre *": ["{0} é um assunto muito vasto. Que tal ser mais específico?", "Não tenho muito o que dizer sobre {0}..."],
+					"falar de *": ["\"{0}\" é um assunto muito vasto. Que tal ser mais específico?", "Não tenho muito o que dizer sobre {0}..."],
+					"vamos falar": ["Sobre o que você quer conversar?", "Vamos falar sobre você.", "Tudo bem. Você começa."]
+			},
+					
+
 			"oi": {"^oi": ["Olá."]},
 			"olá": {"^olá":["Oi!"]},
 			"alô": {"^alô$": ["Estou te ouvindo.", "Olá!", "Pois não?"]}, 
@@ -30,7 +45,8 @@
 			"eu": {"eu sou *": ["E eu sou {0} também?", "De verdade, ou isso é apenas seu desejo de ser {0}?", "É bom ser {0}?"] 
 			
 			},
-			"você": {"você * robô": ["Quase isso. Meu mestre Freixo ainda não construiu um corpo para mim."], 
+			"você": {
+					"você * robô": ["Quase isso. Meu mestre Freixo ainda não construiu um corpo para mim."], 
 					"você é *": ["Você não está projetando em mim o fato de você ser {0}?", "Talvez eu seja mesmo {0}"],
 					"você acha de *": ["{0} não me agrada muito.", "eu adoro {0}."],
 					"você * acha que *": ["Certamente {1}.", "Por que {1}?"],
@@ -59,7 +75,8 @@
 			"sim": {"^sim$": ["Que bom.", "Imaginei.", "Você parece ter muita certeza disso.", "Muito bem."]
 			},
 						
-			"não": {"não * isso": ["Talvez devesse...", "Talvez sim."],
+			"não": {"não sei": ["Talvez a resposta esteja dentro de você.", "Que pena, eu gostaria de saber."],
+					"não * isso": ["Talvez devesse...", "Talvez sim."],
 					"não": ["Pois é."]
 			}, 
 			"futuro": {"futuro": ["É melhor não pensar sobre isso...", "Pensemos no presente."]
