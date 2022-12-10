@@ -91,7 +91,6 @@ def integer_to_words(num):
     blocks.append(int(snum[-3:]))
     for i in range(1, blocks_num):
             blocks.append(int(snum[-(3 + (i*3)):-(3*i)]))
-    print(blocks)
     sentence = []
     millions = [("milhão", "milhões"), ("bilhão", "bilhões"), ("trilhão", "trilhões"), ("quadrilhão", "quadrilhões")]
     
@@ -169,7 +168,10 @@ def func(op1, op2, opt):
     result = operations[opt](op1, op2)
     query = "{} {} {}".format(integer_to_words(op1), opt, integer_to_words(op2))
     if opt == "dividido por":
-        return query + " é igual a " + integer_to_words(result[0]) +" e sobra "+ integer_to_words(result[1])
+        result_str = query + " é igual a " + integer_to_words(result[0])
+        if result[1]:
+            result_str += " e sobra "+ integer_to_words(result[1])
+        return result_str
     else: 
         return query + " é igual a " + integer_to_words(result)
 
