@@ -15,6 +15,7 @@ class Reasoner:
     def __init__(self, script_filename):
         self.rules = defaultdict(lambda: list())
         self.miss = None
+        self.syn = None
         self._load_script(script_filename)
         self.functions = dict()
     
@@ -35,7 +36,12 @@ class Reasoner:
         with open(filename) as f:
             s = f.read()
             doc = json.loads(s)
-        self.miss = doc["miss"]
+        
+        if "miss" in doc.keys():
+            self.miss = doc["miss"]
+        if "syn" in doc.keys():
+            self.syn = doc["syn"]
+
         
         for key in doc["rules"].keys():
             for rule in doc["rules"][key].keys():
@@ -69,6 +75,14 @@ class Reasoner:
     def reason(self, sentence):
         sentence = sentence.lower()
 
+        #Replace all synonims 
+        if self.syn:
+            rep_sentence = sentence
+            for w in sentence.split():
+                if w in self.syn.keys():
+                    rep_sentence = rep_sentence.replace(w, self.syn[w])
+            sentence = rep_sentence
+
         for key in self.rules.keys():
                 if key in sentence:
                     match = self.find_rule(sentence, key)
@@ -92,8 +106,11 @@ class Reasoner:
                         else:
 
                             return random.choice(rule.templates).format(*words)
-                    
-        return random.choice(self.miss)
+        if self.miss:
+            default = random.choice(self.miss)
+        else:
+            default = "?"
+        return default
 
 if __name__ == '__main__':
     reasoner = Reasoner("../scripts/smarter_alda.json")
