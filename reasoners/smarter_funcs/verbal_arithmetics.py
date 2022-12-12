@@ -157,7 +157,7 @@ def words_to_integer(sentence):
         total += current
     return total      
     
-def func(op1, op2, opt):
+def func(var_dict, op1, op2, opt):
     operations = {"mais" : lambda x, y: x+y,
                 "menos": lambda x, y: x-y,
                 "vezes": lambda x, y: x * y,

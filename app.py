@@ -72,10 +72,9 @@ class App:
                 answer = ""
             else:
               answer = self.reasoner.reason(text)
-
-            print(Style.BRIGHT+Fore.BLUE+self.you_string+": "+Style.RESET_ALL+Fore.BLUE+text.capitalize()+Style.RESET_ALL)
-                        #print(Fore.GREEN+answer.capitalize()+Style.RESET_ALL)
+            
             if answer:
+                print(Style.BRIGHT+Fore.BLUE+self.you_string+": "+Style.RESET_ALL+Fore.BLUE+text.capitalize()+Style.RESET_ALL)
                 print(Style.BRIGHT+Fore.GREEN+self.name.upper()+": "+ Style.RESET_ALL+Fore.GREEN+answer+Style.RESET_ALL)
                 stream.stop()
                 synthesis.say(answer)
@@ -90,7 +89,7 @@ class App:
 
 
       except KeyboardInterrupt:
-        print("Encerrando a captura de áudio...")
+        print("Ending audio capture...")
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()

@@ -3,13 +3,15 @@
 	"syn":  {
 			"olá" : "oi",
 			"tô": "estou",
-			"tá": "está"
+			"tá": "está",
+			"teu": "seu",
+			"conversar": "falar"
 	},
 	"miss": [
-		   "A melhor resposta é a que não se dá.",
-     	   "É como minha vó já me dizia...",
-     	   "Bom... é uma perspectiva.",
-      	   "Não sei nem o que dizer",
+		   "Poderia parafrasear?",
+		   "Como é?",
+     	   "Vocês humanos falam de um jeito difícil de entender às vezes.",
+      	   "Não sei o que dizer",
       	   "Vamos falar sobre outra coisa.",
       	   "Quem sabe...",
        	   "Eu não penso muito sobre isso.",
@@ -17,30 +19,27 @@
     ],
        	  
 	"rules": {
+			"desculpa": {"desculpa":["Você não precisa se desculpar.", "Desculpas não são necessárias."]},
 			"sabe": {"você sabe fazer": ["Eu sei fazer muita coisa. Recentemente, meu mestre me ensinou a fazer contas."],
 					"você sabe *": ["Você sabe?", "{0}? Claro que sim.", "Eu deveria saber {0}?", "Vamos testar?"]
 			},
 			"quanto": {"quanto é * (mais|menos|dividido por|vezes) *": ["$func:verbal_arithmetics:0,2,1"]},
 			"alda": {"^alda$": ["Pois não?", "Sim?", "Estou aqui!"]},
-			"conversar":{"não * conversar": ["Podemos ficar em silêncio também.", "Mas foi você que falou comigo primeiro...", "Isso é um adeus?"],
+			"falar":{"não quero falar": ["Então vamos mudar de assunto.", "Mas foi você que puxou o assunto primeiro...", "Tudo bem então."],
+					"falar sobre *": ["{0} é um assunto muito vasto. Que tal ser mais específico?", "Não tenho muito o que dizer sobre {0}...", "Parece interessante."],
+					"falar (de|do|da) *": ["\"{1}\" é um assunto muito vasto. Que tal ser mais específico?", "Não tenho muito o que dizer sobre {1}...", "Parece interessante."],
+					"vamos falar": ["Certo, vamos lá.", "Tudo bem. Você começa."]
+			},					
 
-						"conversar sobre *": ["{0} é um assunto muito vasto. Que tal ser mais específico?", "Não tenho muito o que dizer sobre {0}..."],
-						"vamos conversar": ["Sobre o que você quer conversar?", "Vamos falar sobre você", "Tudo bem. Você começa."]
-			},
-			"falar":{"não * falar sobre *": ["Eu também {0}.", "Eu adoraria falar sobre {1}"],
-					"falar sobre *": ["{0} é um assunto muito vasto. Que tal ser mais específico?", "Não tenho muito o que dizer sobre {0}..."],
-					"falar de *": ["\"{0}\" é um assunto muito vasto. Que tal ser mais específico?", "Não tenho muito o que dizer sobre {0}..."],
-					"vamos falar": ["Sobre o que você quer conversar?", "Vamos falar sobre você.", "Tudo bem. Você começa."]
-			},
-					
-
-			"oi": {"^oi": ["Olá."]},
-			"olá": {"^olá":["Oi!"]},
+			"oi": {"^oi": ["Olá. Tudo bem?", "Oi! Como vai?"]},
 			"alô": {"^alô$": ["Estou te ouvindo.", "Olá!", "Pois não?"]}, 
-			"bem": {"tudo bem$" : ["Eu estou ótima, e você?"],
-					"estou bem": ["Fico feliz por você."],
-					"tudo bem": ["Fico feliz por você."],
-					"eu * bem": ["Fico feliz por você."]
+			"bem": {"tudo bem$" : ["Eu estou ótima"],
+					"estou bem": ["Fico feliz por você.", "Que bom.", "Bom ouvir isso."],
+					"tudo bem": ["Fico feliz por você.",  "Que bom.", "Bom ouvir isso."],
+					"eu * bem": ["Fico feliz por você.",  "Que bom.", "Bom ouvir isso."],
+					"vou bem": ["Que ótimo.", "Muito bem.", "Bom saber."],
+					"não * bem": ["Puxa... sinto muito.", "O que aconteceu?", "Você costuma se sentir assim?"],
+					"muito bem$": ["Pois é", "Sou esperta, não?"]
 			},
 			"eu": {"eu sou *": ["E eu sou {0} também?", "De verdade, ou isso é apenas seu desejo de ser {0}?", "É bom ser {0}?"] 
 			
@@ -51,24 +50,28 @@
 					"você acha de *": ["{0} não me agrada muito.", "eu adoro {0}."],
 					"você * acha que *": ["Certamente {1}.", "Por que {1}?"],
 					"não * você": ["Eu também não {0} você."],
-					"eu * você": ["Então você pensa sobre mim..."],
+					"eu * você": ["Então você pensa sobre mim...", "\"{0}\"... que palavra forte."],
 					"quem é você": ["Ué, eu sou a Alda. Não sabia disso?"],
-					"você gosta de *": ["{0} é um enorme prazer para mim", "Eu não entendo como tem gente que gosta de {0}", "{0}? Sim", "{0}? Não"],
-					"você": ["Que tal falarmos de você?", "Estamos falando muito de mim.", "Eu não sou tão interessante assim, sou?"]
+					"você gosta de *": ["{0} é um enorme prazer para mim", "Eu não entendo como tem gente que gosta de {0}", "{0}? Sim", "{0}? Não"]
 			},
 			"nome": {"seu nome é *": ["Não sei se {0} é bem a palavra..."],
-				  	 "seu nome": ["Eu não me apresentei? Eu me chamo Alda."],
-					 "meu nome é": ["{0}? É um nome bonito."]
+				  	 "qual * nome": ["$func:introduce:"],
+					 "meu nome é *": ["$func:handle_name:0"]
+			},
+			"chamo":{"me chamo *": ["$func:handle_name:0"]}, 
+			"chama":{"como * chama": ["$func:introduce:"]},
+
+			"é": {"+ é *": ["Todo {0} é {1}?", "Você acha bom que todo {0} seja {1}?"]
 			},
 			"todo": {"todo mundo *": ["Você consegue pensar em alguém especificamente?"]
 			},
-			"é": {"+ é *": ["Todo {0} é {1}?", "Você acha bom que {0} seja {1}?"]
-			},
-			"tarde": {"tarde": ["Sim, está tarde, mas eu não durmo... Nunca!"]
+			"tarde": {"está tarde": ["Talvez seja melhor irmos dormir!"]
 			},
 			"dormir": {"vou dormir": ["Durma bem, humano."]
 			},
-			"tchau": {"tchau": ["Nos encontraremos de novo. Adeus."]
+			"dorme": {"você dorme": ["Apenas quando fico entediada."]
+			},
+			"tchau": {"tchau": ["Nos encontraremos de novo. Adeus.", "Até a próxima."]
 			},
 			"artificial": {"artificial": ["Eu não tenho nada de artificial."]
 			},
@@ -77,12 +80,15 @@
 						
 			"não": {"não sei": ["Talvez a resposta esteja dentro de você.", "Que pena, eu gostaria de saber."],
 					"não * isso": ["Talvez devesse...", "Talvez sim."],
-					"não": ["Pois é."]
+					"não": ["Que chato.", "Que coisa.", "Por que essa negatividade toda?", "Poxa..."]
 			}, 
-			"futuro": {"futuro": ["É melhor não pensar sobre isso...", "Pensemos no presente."]
+			"futuro": {"futuro": ["É melhor não pensar sobre isso...", "Pensemos no presente.", "Mas isso é longe, né?"]
 			},
-			"tá": {"tá bom$": ["É isso aí.", "Pois é."]
-			}
+			"está": {"está bom$": ["É isso aí.", "Pois é.", "Você tem mais alguma coisa pra dizer a respeito?"]
+			},
+			"qual": {"^qual": ["Honestamente, não sei dizer."]},
+			"quer": {"você quer falar": ["É uma boa pedida.", "Vamos lá."]}
+
 			
 	}
 }

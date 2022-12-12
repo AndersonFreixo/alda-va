@@ -4,8 +4,6 @@ import random
 import json
 import importlib
 
-FUNCS_PATH = "reasoners.smarter_funcs."
-
 class Rule:
     def __init__(self, pattern):
         self.pattern = pattern
@@ -18,7 +16,7 @@ class Reasoner:
         self.syn = None
         self._load_script(script_filename)
         self.functions = dict()
-    
+        self.variables = dict()    
     def wake_up(self):
         wakeup_messages = ["Ops! Cochilei.", 
             "Hã? Eu estava acordada, eu juro.", 
@@ -75,7 +73,9 @@ class Reasoner:
     def reason(self, sentence):
         sentence = sentence.lower()
 
-        #Replace all synonims 
+        #Replace all synonims
+        #Provisory - and maybe definitive - solution:
+        #This may replace the wrong characters.
         if self.syn:
             rep_sentence = sentence
             for w in sentence.split():
@@ -100,9 +100,11 @@ class Reasoner:
                             if func_name not in self.functions.keys():
                                 self.functions[func_name] = importlib.import_module(FUNCS_PATH+func_name)
                             
-                            args_order = [int(x) for x in args_order.split(',')]
-                            args = [words[i] for i in args_order]
-                            return self.functions[func_name].func(* args)
+                            if args_order:
+                                args_order = [int(x) for x in args_order.split(',')]
+                                args = [words[i] for i in args_order]
+                            else: args = []
+                            return self.functions[func_name].func(self.variables, * args)
                         else:
 
                             return random.choice(rule.templates).format(*words)
@@ -113,6 +115,7 @@ class Reasoner:
         return default
 
 if __name__ == '__main__':
+    FUNCS_PATH = "smarter_funcs."
     reasoner = Reasoner("../scripts/smarter_alda.json")
     reasoner.print_all_rules()
     q = input(">>").lower()
@@ -121,3 +124,5 @@ if __name__ == '__main__':
         if a:
             print(">>", a)
         q = input(">>").lower()
+else:
+    FUNCS_PATH = "reasoners.smarter_funcs."
