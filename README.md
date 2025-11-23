@@ -8,7 +8,9 @@ The goal of the project is to provide a simple and fun chatbot that doesn't rely
 
 At the moment,there are two "reasoning" modules. One of them is a simplified version of Weizenbaum's ELIZA, and the other one is an extended version of the later which allows templates to call functions using parts of the utterance as arguments. The "smarter_alda" script uses this feature to do basic arithmetic operations. 
 
-Although brazilian portuguese is the only language supported up to now, the project may be easely extended to other languages by 
+[Here's an example video](https://youtu.be/1HfSZoAcwMc) of Alda having a conversation and making simple calculations.
+
+Although Brazilian Portuguese is the only language supported up to now, the project may be easely extended to other languages by 
 
 1. Writting a script for the target language following the structure of Alda's default script
 2. Downloading the propper vosk model for the language 
